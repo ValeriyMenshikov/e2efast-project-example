@@ -7,8 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-e2efast = "0.2.2"
 pytest = "^9.0.1"
+pydantic-settings = "^2.12.0"
+e2efast = {git = "https://github.com/ValeriyMenshikov/e2efast.git"}
 
 
 [build-system]

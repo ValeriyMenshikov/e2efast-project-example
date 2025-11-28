@@ -6,28 +6,59 @@
 
 This project was scaffolded from the OpenAPI specification for the `petstore` service. The codebase is organised to keep generated artefacts separate from the places where you add custom logic, making it safe to rerun the generator whenever the contract changes.
 
+## Quick Start
+
+1. Run the generator (adjusting service name/spec as needed). The `--spec`
+   option accepts either a local file path or an HTTP(S) URL:
+
+   ```bash
+   poetry run e2efast petstore --spec ./openapi.json --with-tests
+   ```
+
+2. Open `framework/settings/base_settings.py` and update the base URL or any
+   other settings you require.
+
+3. Export the environment variables (or ensure they are provided via your
+   settings loader) and start writing tests—the generated clients, fixtures, and
+   tests will use the configuration automatically.
+
+   On the first run the generator creates `framework/settings/base_settings.py`
+   and, when fixtures are enabled, `tests/conftest.py`. Subsequent updates should
+   be applied manually.
+
+4. Need only clients and fixtures (without tests)? Run the same command with
+   `--with-fixtures` (the `--spec` option still accepts a path or URL):
+
+   ```bash
+   poetry run e2efast petstore --spec ./openapi.json --with-fixtures
+   ```
+
 ## Project Structure
 
 ```
-├── framework                     # User-facing extension layer
+├── framework                          # User-facing extension layer
 │    ├── clients
 │    │    └── http
-│    │        ├── schemas               # OpenAPI schemas for all generated APIs
 │    │        └── petstore          # Service namespace for editable wrappers
-│    │            ├── apis              # Generated API client classes (safe to extend)
-│    │            └── models            # Pydantic models imported by wrappers
-│    └── fixtures
-│         └── http
-│             └── petstore.py       # Fixtures for wrapper clients
+│    ├── fixtures
+│    │     └── http
+│    │         ├── base.py             # Define ClientClass alias (editable)
+│    │         └── petstore.py      # Fixtures for wrapper clients (overwritten on regen)
+│    └── settings
+│         └── base_settings.py         # Pydantic settings scaffold (generated once)
 │
-├── internal                      # Auto-regenerated low-level clients
+├── internal                           # Auto-regenerated low-level clients
 │    └── clients
-│         └── http/petstore/        # REST clients & models (overwritten on regen)
+│        └── http                      # REST clients & models (overwritten on regen)
+│            └── petstore
+│                ├── apis              # Generated API client classes
+│                └── models            # Pydantic models
 │
-└── tests                         # Generated or custom test suites
-     └── http/petstore            # Generated test suite (if enabled)
+└── tests                              # Generated or custom test suites
+     ├── conftest.py                   # pytest plugin registration (generated once)
+     └── http
+          └── petstore            # Generated test suite (if enabled)
 ```
-
 * **internal** – contains the raw clients and data models produced by `restcodegen`. These files are overwritten on each generation. If you need a technical helper (e.g. custom HTTP adapter or DB-aware client), place it in another module to avoid losing changes.
 * **framework/clients/http/petstore** – hosts subclasses of the generated clients. Override methods here to simplify calls or add project-specific behaviour. Files in this folder are **not** overwritten after the first generation.
 * **framework/fixtures/http/petstore.py** – pytest fixtures that instantiate the wrapper clients. They provide a single entry point for the HTTP client configuration used inside tests.
@@ -37,7 +68,7 @@ This project was scaffolded from the OpenAPI specification for the `petstore` se
 1. Expose the fixtures to pytest by adding the generated module to `pytest_plugins` in your root `conftest.py`:
 
    ```python
-   pytest_plugins = ["fixtures.http.petstore"]
+   pytest_plugins = ["framework.fixtures.http.petstore"]
    ```
 
 2. Export the base URL for the service before running tests:
@@ -45,8 +76,25 @@ This project was scaffolded from the OpenAPI specification for the `petstore` se
    ```bash
    export PETSTORE_BASE_URL="https://api.example.test"
    ```
+   or
+   ```python
+   # conftest.py
+   import os
+   os.environ["PETSTORE_BASE_URL"] = "https://api.example.test"
+   ```
 
    The fixtures will reuse this environment variable when creating HTTP clients.
+
+3. If you need to change the HTTP client implementation globally, edit
+   `framework/fixtures/http/base.py` and update `ClientClass`. Every generated
+   fixture imports that alias and will pick up the override automatically.
+
+4. Initial configuration settings are scaffolded in
+   `framework/settings/base_settings.py`. The file is generated only on the
+   first run—afterwards you should maintain it manually (for example, to point at
+   different hosts or add extra parameters). The expected environment variable
+   names follow the pattern `<package_name_upper>_BASE_URL`; you can confirm the
+   exact name inside any generated fixture (look for the `os.getenv` call).
 
 ## Regeneration Guidelines
 

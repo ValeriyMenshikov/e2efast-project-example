@@ -162,17 +162,21 @@ validation = ["openapi-spec-validator (>=0.2.8,<0.8)", "prance (>=0.18.2)"]
 
 [[package]]
 name = "e2efast"
-version = "0.2.2"
+version = "0.2.3"
 description = "Framework for fast Е2Е API testing"
 optional = false
-python-versions = "<4.0,>=3.10"
-files = [
-    {file = "e2efast-0.2.2-py3-none-any.whl", hash = "sha256:1d41965f05939d9656c808fbbb43b6f83352add783a16448004a12ec2e3dc97f"},
-    {file = "e2efast-0.2.2.tar.gz", hash = "sha256:2783225be69144c17b742e67bc5a84abb4271b6efa669ca4321a26aa37782ea9"},
-]
+python-versions = ">=3.10, <4.0"
+files = []
+develop = false
 
 [package.dependencies]
 restcodegen = ">=2.0.1"
+
+[package.source]
+type = "git"
+url = "https://github.com/ValeriyMenshikov/e2efast.git"
+reference = "HEAD"
+resolved_reference = "762c4bbd994954db2c507bbc0694c2dfd2c44e86"
 
 [[package]]
 name = "genson"
@@ -649,6 +653,29 @@ files = [
 typing-extensions = ">=4.14.1"
 
 [[package]]
+name = "pydantic-settings"
+version = "2.12.0"
+description = "Settings management using Pydantic"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "pydantic_settings-2.12.0-py3-none-any.whl", hash = "sha256:fddb9fd99a5b18da837b29710391e945b1e30c135477f484084ee513adb93809"},
+    {file = "pydantic_settings-2.12.0.tar.gz", hash = "sha256:005538ef951e3c2a68e1c08b292b5f2e71490def8589d4221b95dab00dafcfd0"},
+]
+
+[package.dependencies]
+pydantic = ">=2.7.0"
+python-dotenv = ">=0.21.0"
+typing-inspection = ">=0.4.0"
+
+[package.extras]
+aws-secrets-manager = ["boto3 (>=1.35.0)", "boto3-stubs[secretsmanager]"]
+azure-key-vault = ["azure-identity (>=1.16.0)", "azure-keyvault-secrets (>=4.8.0)"]
+gcp-secret-manager = ["google-cloud-secret-manager (>=2.23.1)"]
+toml = ["tomli (>=2.0.1)"]
+yaml = ["pyyaml (>=6.0.1)"]
+
+[[package]]
 name = "pygments"
 version = "2.19.2"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -682,6 +709,20 @@ pygments = ">=2.7.2"
 
 [package.extras]
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "requests", "setuptools", "xmlschema"]
+
+[[package]]
+name = "python-dotenv"
+version = "1.2.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "python_dotenv-1.2.1-py3-none-any.whl", hash = "sha256:b81ee9561e9ca4004139c6cbba3a238c32b03e4894671e181b671e8cb8425d61"},
+    {file = "python_dotenv-1.2.1.tar.gz", hash = "sha256:42667e897e16ab0d66954af0e60a9caa94f0fd4ecf3aaf6d2d260eec1aa36ad6"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pytokens"
@@ -922,4 +963,4 @@ typing-extensions = ">=4.12.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "a292c4d1517c521a57e6c1dcccbe6d1868ea36bba89ca060bd7aa7e826a585a6"
+content-hash = "fbfc5f7dc710bd16ba90673b1d2404e960083c89c81d7767072c796fe80a1707"

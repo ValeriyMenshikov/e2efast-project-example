@@ -16,13 +16,13 @@ from httpx import Client
 
 from internal.clients.http.petstore.models.api_models import (
     
-    UploadFileRequestBody,
-    
     FindPetsByTagsResponse200,
     
-    ApiResponse,
+    UploadFileRequestBody,
     
     FindPetsByStatusResponse200,
+    
+    ApiResponse,
     
     Pet,
     

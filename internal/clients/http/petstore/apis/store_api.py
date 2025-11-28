@@ -16,9 +16,9 @@ from httpx import Client
 
 from internal.clients.http.petstore.models.api_models import (
     
-    GetInventoryResponse200,
-    
     Order,
+    
+    GetInventoryResponse200,
     
 )
 

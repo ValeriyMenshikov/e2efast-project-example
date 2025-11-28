@@ -16,11 +16,11 @@ from httpx import Client
 
 from internal.clients.http.petstore.models.api_models import (
     
-    User,
+    LoginUserResponse200,
     
     CreateUsersWithListInputRequestBody,
     
-    LoginUserResponse200,
+    User,
     
 )
 
