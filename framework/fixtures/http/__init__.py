@@ -1,0 +1,1 @@
+from . import petstore_service  # noqa: F401
